@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAIN - Global Armenian Impact Network</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151f32',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 5s ease-in-out infinite 1s',
+                        'float-slow': 'float 10s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        /* Pillar Card Hover Effects */
+        .pillar-card {
+            transition: all 0.3s ease;
+        }
+        
+        .pillar-card:hover .pillar-bg-gradient {
+            transform: scaleX(1);
+        }
+        
+        /* Icon color change on hover */
+        .pillar-card:hover .pillar-icon-container {
+            background-color: white;
+            color: #0f172a; /* slate-900 */
+        }
+    </style>
+</head>
+<body class="bg-[#FDFDFC] text-slate-900 font-sans selection:bg-slate-900 selection:text-white overflow-x-hidden relative">
+
+    <!-- Texture Overlay -->
+    <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E')"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent py-6">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-8 h-8 bg-slate-900 text-white flex items-center justify-center rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-orange-300"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold tracking-tight leading-none text-lg">GAIN</span>
+                    <span class="text-[9px] font-medium tracking-widest uppercase text-slate-500">Global Armenian Impact Network</span>
+                </div>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="#manifesto" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Our Mission</a>
+                <a href="#programs" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Programs</a>
+                <a href="#events" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Events</a>
+                <a href="#marketplace" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Marketplace</a>
+                <a href="#network" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">The Map</a>
+                <button class="px-5 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-slate-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                    Join the Network
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-slate-900">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-white pt-24 px-6 md:hidden hidden transition-opacity duration-300 opacity-0">
+        <div class="flex flex-col gap-8 text-2xl font-serif">
+            <a href="#manifesto" class="mobile-link">Our Mission</a>
+            <a href="#programs" class="mobile-link">Programs</a>
+            <a href="#events" class="mobile-link">Events</a>
+            <a href="#marketplace" class="mobile-link">Marketplace</a>
+            <a href="#network" class="mobile-link">The Map</a>
+            <button class="mt-4 px-6 py-4 bg-slate-900 text-white text-sm font-bold uppercase tracking-wider rounded-full w-full">Join the Network</button>
+        </div>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-slate-900">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative pt-48 pb-32 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="relative z-10 space-y-12">
+                
+                <div class="animate-fade-in-up">
+                    <span class="inline-block py-1 px-3 border border-slate-200 rounded-full bg-white/50 backdrop-blur-sm text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-6 shadow-sm">
+                        Project 2026 • Status: Building
+                    </span>
+                    
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium tracking-tight text-slate-900 leading-[1.05] max-w-5xl">
+                        The Architecture of a <br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 relative">
+                            Virtual Armenian Nation
+                            <span class="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-purple-500 to-blue-500 opacity-30 blur-sm rounded-full"></span>
+                        </span>
+                    </h1>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-12 md:items-end animate-fade-in-up" style="animation-delay: 100ms;">
+                    <p class="text-lg md:text-xl text-slate-500 font-light leading-relaxed max-w-xl">
+                        We are moving from fragmented silos to a unified, high-trust ecosystem. 
+                        GAIN is the operating system for global Armenian reciprocity—where <strong class="text-slate-900 font-medium">success anywhere powers progress everywhere.</strong>
+                    </p>
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="flex -space-x-4">
+                            <!-- Placeholder Avatars -->
+                            <div class="w-12 h-12 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center shadow-md" style="background-image: url('https://i.pravatar.cc/150?img=11')"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center shadow-md" style="background-image: url('https://i.pravatar.cc/150?img=12')"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center shadow-md" style="background-image: url('https://i.pravatar.cc/150?img=13')"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center shadow-md" style="background-image: url('https://i.pravatar.cc/150?img=14')"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white bg-slate-900 text-white flex items-center justify-center text-xs font-bold shadow-md">+45k</div>
+                        </div>
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                            Active<br/>Nodes
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Abstract Hero Visual Background -->
+        <div class="absolute top-0 right-0 w-1/2 h-full -z-10 opacity-40 pointer-events-none hidden lg:block overflow-hidden">
+            <div class="absolute top-1/4 right-0 w-[800px] h-[800px] bg-gradient-to-b from-blue-50 to-orange-50 rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
+            <div class="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-gradient-to-t from-purple-50 to-transparent rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
+        </div>
+    </section>
+
+    <!-- Manifesto Section -->
+    <section id="manifesto" class="py-32 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-12 gap-12 md:gap-24">
+                <div class="md:col-span-4 space-y-8">
+                    <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Our Mission</h2>
+                    <div class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
+                        Fragmentation <br/>is our greatest <br/>liability.
+                    </div>
+                </div>
+                <div class="md:col-span-8 grid md:grid-cols-2 gap-12">
+                    <div class="space-y-4">
+                        <div class="w-12 h-1 bg-orange-400 mb-6"></div>
+                        <h3 class="text-xl font-bold text-slate-900">Disconnected Silos</h3>
+                        <p class="text-slate-500 leading-relaxed">
+                            Talent, resources, and opportunities are currently trapped within specific organizations, cities, or circles. A biotech expert in Boston has no easy way to find a student in Yerevan.
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-1 bg-purple-500 mb-6"></div>
+                        <h3 class="text-xl font-bold text-slate-900">Transactional Limits</h3>
+                        <p class="text-slate-500 leading-relaxed">
+                            Traditional networking asks "What can I get?" We are building an infrastructure based on "What can I give?"—operationalizing reciprocity at a global scale.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Pillars Section (Programs & Values) -->
+    <section id="programs" class="py-32 bg-slate-900 text-white relative overflow-hidden">
+        <!-- Background Noise -->
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg');"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">Core Values</h2>
+                    <div class="text-4xl md:text-6xl font-serif leading-tight">
+                        Six Pillars of the <br/>Network State.
+                    </div>
+                </div>
+                <p class="text-slate-400 max-w-sm leading-relaxed">
+                    GAIN is built on six non-negotiable values that transform how we connect, work, and grow together.
+                </p>
+            </div>
+
+            <div id="pillar-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pillar-grid">
+                
+                <!-- Pillar 1: Trust -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <!-- Hover gradient bar -->
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="shield-check" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">01</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Trust</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Climate of Trust</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        The foundation of the network. Moving from low-trust, transactional contacts to high-trust, meaningful relationships.
+                    </p>
+
+                    <!-- Always Visible Points -->
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Vetted Identity Verification</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Sponsorship-Based Entry</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>High-Context Introductions</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Mutual Accountability</div>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Reciprocity -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="share-2" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">02</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Reciprocity</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Culture of Giving Forward</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        Shifting the mindset from "What can I get?" to "How can we lift each other up?"—operationalizing support at scale.
+                    </p>
+
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Democratized Opportunity</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Intergenerational Support</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Active Endorsement</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Sharing Knowledge</div>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Acceleration -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="trending-up" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">03</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Acceleration</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Catalysis of Growth</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        Moving Armenians into positions of influence through meritocratic excellence and strategic boosting.
+                    </p>
+
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Meritocratic Excellence</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Bridging Potential & Power</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Strategic Collisions</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Shortening Learning Curves</div>
+                    </div>
+                </div>
+
+                <!-- Pillar 4: Connection -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="network" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">04</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Connection</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Smart Global Connectivity</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        Solving fragmentation through AI orchestration. A "Network of Networks" that bridges silos and geographies.
+                    </p>
+
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>AI-Orchestrated Matching</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Breaking Institutional Silos</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Warm Introductions</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Dynamic Graph</div>
+                    </div>
+                </div>
+
+                <!-- Pillar 5: Belonging -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="heart" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">05</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Belonging</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Shared Identity</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        Creating a "Virtual Armenian Nation" where every member is valued. A safe, inclusive space for cultural preservation.
+                    </p>
+
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Radical Inclusivity</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Relational over Transactional</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Safe Spaces</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Celebrating Heritage</div>
+                    </div>
+                </div>
+
+                <!-- Pillar 6: Impact -->
+                <div class="pillar-card group relative p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/5 cursor-default flex flex-col min-h-[460px]">
+                    <div class="pillar-bg-gradient absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="pillar-icon-container w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                            <i data-lucide="zap" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-white/30 group-hover:text-white/60">06</span>
+                    </div>
+
+                    <h3 class="text-2xl font-serif mb-2 text-white">Impact</h3>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Coordinated Resilience</div>
+                    
+                    <p class="text-slate-400 leading-relaxed mb-8 text-sm">
+                        Turning individual success into collective strength. Coordinated action for global resilience and local needs.
+                    </p>
+
+                    <div class="pillar-points mt-auto space-y-2 pt-6 border-t border-white/5">
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Unified Crisis Response</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Global Efforts, Local Needs</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Collective Resilience</div>
+                        <div class="flex items-center gap-3 text-xs font-medium text-slate-300"><div class="w-1 h-1 bg-indigo-400 rounded-full"></div>Tangible Outcomes</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Network Map / Future Section -->
+    <section id="network" class="py-32 bg-[#FDFDFC] overflow-hidden relative">
+        <!-- New Background Layer: Glowing Network Map -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+            <!-- Container for absolute nodes -->
+            <div class="relative w-full h-full opacity-30 blur-sm">
+                <!-- SVG Lines Connecting Nodes -->
+                <svg class="absolute inset-0 w-full h-full z-0">
+                    <line x1="15%" y1="20%" x2="45%" y2="40%" stroke="#94a3b8" stroke-width="1" />
+                    <line x1="15%" y1="20%" x2="25%" y2="70%" stroke="#94a3b8" stroke-width="1" />
+                    <line x1="45%" y1="40%" x2="80%" y2="30%" stroke="#94a3b8" stroke-width="1" />
+                    <line x1="45%" y1="40%" x2="70%" y2="75%" stroke="#94a3b8" stroke-width="1" />
+                    <line x1="80%" y1="30%" x2="85%" y2="60%" stroke="#94a3b8" stroke-width="1" />
+                    <line x1="25%" y1="70%" x2="70%" y2="75%" stroke="#94a3b8" stroke-width="1" />
+                </svg>
+
+                <!-- Node 1 -->
+                <div class="absolute top-[20%] left-[15%] w-16 h-16 rounded-full bg-cover bg-center shadow-[0_0_20px_rgba(251,146,60,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=33'); animation-delay: 0s;"></div>
+                
+                <!-- Node 2 -->
+                <div class="absolute top-[40%] left-[45%] w-24 h-24 rounded-full bg-cover bg-center shadow-[0_0_30px_rgba(129,140,248,0.5)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=47'); animation-delay: 2s;"></div>
+                
+                <!-- Node 3 -->
+                <div class="absolute top-[70%] left-[25%] w-12 h-12 rounded-full bg-cover bg-center shadow-[0_0_15px_rgba(167,139,250,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=12'); animation-delay: 4s;"></div>
+                
+                <!-- Node 4 -->
+                <div class="absolute top-[30%] right-[20%] w-20 h-20 rounded-full bg-cover bg-center shadow-[0_0_25px_rgba(52,211,153,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=59'); animation-delay: 1s;"></div>
+                
+                <!-- Node 5 -->
+                <div class="absolute bottom-[25%] right-[30%] w-16 h-16 rounded-full bg-cover bg-center shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=68'); animation-delay: 3s;"></div>
+                
+                <!-- Node 6 -->
+                <div class="absolute bottom-[40%] right-[15%] w-10 h-10 rounded-full bg-cover bg-center shadow-[0_0_15px_rgba(96,165,250,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=5'); animation-delay: 5s;"></div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                <div class="lg:w-1/2 space-y-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/90 backdrop-blur border border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        Live Network Preview
+                    </div>
+                    
+                    <h2 class="text-4xl md:text-6xl font-serif text-slate-900 leading-[1.1]">
+                        See the invisible <br/>
+                        <span class="italic text-slate-400">connections.</span>
+                    </h2>
+                    
+                    <p class="text-lg text-slate-500 leading-relaxed max-w-md bg-white/50 backdrop-blur-sm rounded-lg p-2">
+                        Open the “Virtual Armenian Nation” map and see a living, breathing ecosystem. Discover who studies biotech in Paris or who works in policy in DC.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <button class="flex items-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-full text-sm font-medium hover:bg-slate-800 transition-colors shadow-xl shadow-slate-200">
+                            <i data-lucide="globe" class="w-4 h-4"></i>
+                            Explore the Global Map
+                        </button>
+                        <button class="flex items-center gap-3 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-full text-sm font-medium hover:bg-slate-50 transition-colors">
+                            Read the Whitepaper
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 relative">
+                    <div class="relative aspect-square md:aspect-[4/3] bg-gradient-to-br from-slate-100/80 to-white/90 backdrop-blur-md rounded-3xl border border-slate-100 shadow-2xl overflow-hidden p-8 group">
+                        <!-- Abstract Map UI -->
+                        <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px;"></div>
+                        
+                        <!-- Animated Nodes (Local visual) -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-orange-400/20 rounded-full blur-3xl animate-pulse"></div>
+                        
+                        <!-- Floating Cards -->
+                        <div class="absolute top-[20%] right-[10%] bg-white p-4 rounded-xl shadow-lg border border-slate-100 w-48 animate-float">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                                <div class="space-y-1">
+                                    <div class="h-2 w-16 bg-slate-200 rounded"></div>
+                                    <div class="h-1.5 w-10 bg-slate-100 rounded"></div>
+                                </div>
+                            </div>
+                            <div class="h-1.5 w-full bg-slate-100 rounded mb-1"></div>
+                            <div class="h-1.5 w-2/3 bg-slate-100 rounded"></div>
+                            <div class="mt-3 flex gap-2">
+                                <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] rounded font-medium">Mentor</span>
+                                <span class="px-2 py-0.5 bg-purple-50 text-purple-600 text-[9px] rounded font-medium">Tech</span>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-[20%] left-[10%] bg-white p-4 rounded-xl shadow-lg border border-slate-100 w-52 animate-float-delayed">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2 text-xs font-bold text-slate-900">
+                                    <i data-lucide="sparkles" class="w-3 h-3 text-orange-500"></i>
+                                    AI Match Found
+                                </div>
+                                <span class="text-[9px] text-slate-400">Just now</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 border-2 border-white ring-1 ring-slate-100"></div>
+                                <div class="h-px w-8 bg-slate-200"></div>
+                                <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-white ring-1 ring-slate-100"></div>
+                            </div>
+                            <div class="mt-3 text-[10px] text-slate-500 leading-normal">
+                                Connection facilitated based on shared interest in <strong>Sustainable Energy</strong>.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+                <div class="space-y-6 max-w-sm">
+                    <div class="flex items-center gap-2 text-xl font-serif font-bold tracking-tight">
+                        GAIN
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Global Armenian Impact Network.<br/>
+                        Building the digital infrastructure for the 21st-century global Armenian nation.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-16">
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900">Platform</h4>
+                        <ul class="space-y-3 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">Manifesto</a></li>
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">Network Map</a></li>
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">Mentorship</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900">Connect</h4>
+                        <ul class="space-y-3 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">LinkedIn</a></li>
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">Twitter / X</a></li>
+                            <li><a href="#" class="hover:text-slate-900 transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-slate-100 text-xs text-slate-400 font-medium uppercase tracking-wider">
+                <p>© 2026 GAIN Network.</p>
+                <div class="flex gap-6">
+                    <span>Yerevan</span>
+                    <span>Los Angeles</span>
+                    <span>Paris</span>
+                    <span>London</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white/90', 'backdrop-blur-xl', 'border-b', 'border-slate-200', 'py-3');
+                navbar.classList.remove('bg-transparent', 'py-6');
+            } else {
+                navbar.classList.remove('bg-white/90', 'backdrop-blur-xl', 'border-b', 'border-slate-200', 'py-3');
+                navbar.classList.add('bg-transparent', 'py-6');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => mobileMenu.classList.remove('opacity-0'), 10);
+            } else {
+                mobileMenu.classList.add('opacity-0');
+                setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+</html>
