@@ -39,8 +39,9 @@
                         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
                         'float': 'float 6s ease-in-out infinite',
                         'float-delayed': 'float 5s ease-in-out infinite 1s',
-                        'float-slow': 'float 10s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-slow': 'float 12s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 20s linear infinite',
                     },
                     keyframes: {
                         fadeInUp: {
@@ -66,12 +67,17 @@
         .pillar-card { transition: all 0.3s ease; }
         .pillar-card:hover { transform: translateY(-5px); }
         .last\:border-r-0:last-child { border-right-width: 0 !important; }
+        
+        /* Node glowing effect */
+        .node-glow-blue { box-shadow: 0 0 25px rgba(59, 130, 246, 0.4); }
+        .node-glow-orange { box-shadow: 0 0 25px rgba(249, 115, 22, 0.4); }
+        .node-glow-purple { box-shadow: 0 0 25px rgba(168, 85, 247, 0.4); }
     </style>
 </head>
 <body class="bg-[#FDFDFC] text-slate-900 font-sans selection:bg-gainBlue-900 selection:text-white overflow-x-hidden relative">
 
     <!-- Texture Overlay -->
-    <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25' height='100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E')"></div>
+    <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25' height='100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E')"></div>
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent py-6">
@@ -86,9 +92,10 @@
             </div>
 
             <div class="hidden lg:flex items-center gap-8">
-                <a href="#ai-engine" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">AI Engine</a>
                 <a href="#formula" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Programs</a>
                 <a href="#values" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Values</a>
+                <a href="#ai-engine" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">AI Engine</a>
+                <a href="#network" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">The Map</a>
                 <button class="px-5 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-slate-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
                     Join the Network
                 </button>
@@ -103,9 +110,10 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="fixed inset-0 z-40 bg-white pt-24 px-6 md:hidden hidden transition-opacity duration-300 opacity-0">
         <div class="flex flex-col gap-8 text-2xl font-serif">
-            <a href="#ai-engine" class="mobile-link">AI Engine</a>
             <a href="#formula" class="mobile-link">Programs</a>
             <a href="#values" class="mobile-link">Values</a>
+            <a href="#ai-engine" class="mobile-link">AI Engine</a>
+            <a href="#network" class="mobile-link">The Map</a>
             <button class="mt-4 px-6 py-4 bg-slate-900 text-white text-sm font-bold uppercase tracking-wider rounded-full w-full">Join the Network</button>
         </div>
         <button id="close-menu-btn" class="absolute top-6 right-6 text-slate-900">
@@ -114,67 +122,124 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="relative pt-48 pb-32 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="relative z-10 space-y-12">
+    <section class="relative pt-40 pb-20 px-6 lg:pt-48 lg:pb-32">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 
-                <div class="animate-fade-in-up">
-                    <span class="inline-block py-1 px-3 border border-slate-200 rounded-full bg-white/50 backdrop-blur-sm text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-6 shadow-sm">
-                        Project 2026 • Status: Building
-                    </span>
-                    
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium tracking-tight text-slate-900 leading-[1.05] max-w-5xl">
-                        GAIN — Global <br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 relative">
-                            Armenian Impact Network
-                            <span class="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-purple-500 to-blue-500 opacity-30 blur-sm rounded-full"></span>
+                <!-- Hero Content (Left) -->
+                <div class="relative z-10 space-y-8 animate-fade-in-up">
+                    <div>
+                        <span class="inline-block py-1 px-3 border border-slate-200 rounded-full bg-white/50 backdrop-blur-sm text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-6 shadow-sm">
+                            Project 2026 • Status: Building
                         </span>
-                    </h1>
+                        
+                        <h1 class="text-5xl md:text-7xl lg:text-7xl font-serif font-medium tracking-tight text-slate-900 leading-[1.05]">
+                            GAIN — <br/>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 relative">
+                                Global Armenian Impact Network
+                            </span>
+                        </h1>
+                        
+                        <p class="text-lg text-slate-500 font-medium tracking-wide mt-4 italic">
+                            where success anywhere powers progress everywhere
+                        </p>
+                    </div>
                 </div>
 
-                <!-- What is GAIN? Section -->
-                <div class="animate-fade-in-up relative p-px bg-gradient-to-r from-indigo-100 via-white to-orange-100 rounded-2xl shadow-xl" style="animation-delay: 200ms;">
-                    <div class="relative bg-white/95 backdrop-blur-sm rounded-2xl p-8">
-                        <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8 border-b border-slate-100 pb-2 inline-block">What is GAIN?</h2>
-                        <div class="grid md:grid-cols-4 gap-8">
+                <!-- Hero Visual: Network Map (Right) - UPDATED REDESIGNED -->
+                <div class="relative h-[500px] w-full animate-fade-in-up flex flex-col items-center justify-center" style="animation-delay: 200ms;">
+                    <!-- Container for the map -->
+                    <div class="relative h-[450px] w-full max-w-[500px] flex items-center justify-center">
+                        
+                        <!-- Background Glow -->
+                        <div class="absolute w-[400px] h-[400px] bg-indigo-100 rounded-full blur-3xl opacity-50 animate-pulse-slow"></div>
+
+                        <!-- Rotating Orbit Ring (Decoration) -->
+                        <div class="absolute w-[350px] h-[350px] border border-slate-100 rounded-full animate-spin-slow opacity-50"></div>
+                        <div class="absolute w-[250px] h-[250px] border border-slate-100 rounded-full animate-spin-slow opacity-50" style="animation-direction: reverse;"></div>
+
+                        <!-- SVG Connections (Increased Density and Complexity) -->
+                        <svg class="absolute inset-0 w-full h-full z-0 pointer-events-none drop-shadow-sm opacity-60">
+                            <!-- Helper function to simplify line creation -->
+                            <script>
+                                // Define node coordinates (normalized 0-100)
+                                const nodes_map = {
+                                    center: [50, 50], n1: [75, 25], n2: [25, 70], n3: [20, 30], n4: [80, 65],
+                                    n5: [50, 15], n6: [90, 50], n7: [10, 50], n8: [50, 85], n9: [35, 45],
+                                    n10: [65, 35], n11: [30, 60], n12: [85, 45], n13: [15, 80], n14: [40, 5]
+                                };
+
+                                // Draw connections (increased cross-linking)
+                                const connections_map = [
+                                    ['center', 'n1', '#cbd5e1', 1.5, '4 2', 0.6], ['center', 'n2', '#94a3b8', 2, '', 0.5],
+                                    ['center', 'n3', '#60a5fa', 1, '', 0.8], ['center', 'n4', '#a78bfa', 1.5, '', 0.7],
+                                    ['center', 'n5', '#60a5fa', 1, '', 0.4], ['center', 'n6', '#cbd5e1', 0.5, '2 1', 0.3],
+                                    ['center', 'n7', '#94a3b8', 1, '', 0.6], ['center', 'n8', '#a78bfa', 2, '', 0.9],
+                                    ['center', 'n9', '#60a5fa', 1.5, '', 0.8], ['center', 'n10', '#a78bfa', 1, '', 0.7],
+                                    ['center', 'n11', '#94a3b8', 1.5, '', 0.6], ['center', 'n12', '#cbd5e1', 1, '3 1', 0.4],
+                                    ['center', 'n13', '#a78bfa', 1.5, '', 0.8], ['center', 'n14', '#60a5fa', 1, '', 0.5],
+                                    
+                                    // Cross connections (more density)
+                                    ['n1', 'n10', '#cbd5e1', 0.5, '', 0.3], ['n3', 'n11', '#94a3b8', 1, '', 0.4],
+                                    ['n2', 'n8', '#a78bfa', 1, '4 2', 0.5], ['n4', 'n12', '#cbd5e1', 0.5, '', 0.2],
+                                    ['n7', 'n13', '#60a5fa', 1, '', 0.5], ['n5', 'n14', '#94a3b8', 0.5, '', 0.3],
+                                    ['n9', 'n11', '#a78bfa', 0.5, '', 0.4], ['n8', 'n4', '#60a5fa', 0.5, '', 0.3]
+                                ];
+
+                                // Function to draw line (SVG coordinates are 0-100% of container size)
+                                function drawLineMap(n1, n2, color, width, dash, opacity) {
+                                    document.write(`<line x1="${n1[0]}%" y1="${n1[1]}%" x2="${n2[0]}%" y2="${n2[1]}%" stroke="${color}" stroke-width="${width}" stroke-dasharray="${dash}" class="opacity-[${opacity}]" style="transition: opacity 0.5s;" />`);
+                                }
+
+                                connections_map.forEach(c => drawLineMap(nodes_map[c[0]], nodes_map[c[1]], c[2], c[3], c[4], c[5]));
+                            </script>
+                        </svg>
+
+                        <!-- The Network Nodes - Increased Density and BLUR on edges -->
+                        <div class="absolute inset-0 animate-float-slow">
                             
-                            <!-- 1 -->
-                            <div class="space-y-3 border-r border-slate-100 pr-6 lg:last:border-r-0">
-                                <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                    <i data-lucide="globe-2" class="w-4 h-4"></i>
+                            <!-- Central Hub Node (GAIN) -->
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 bg-white rounded-full shadow-2xl flex items-center justify-center z-20 border-4 border-white node-glow-blue animate-pulse-slow">
+                                <div class="text-center">
+                                    <i data-lucide="sparkles" class="w-8 h-8 text-indigo-600 mx-auto mb-1"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-900 block">GAIN</span>
                                 </div>
-                                <h3 class="font-bold text-slate-900 text-sm">Global Opportunity</h3>
-                                <p class="text-xs text-slate-500 leading-relaxed">A place where your talent meets global opportunities.</p>
+                            </div>
+
+                            <!-- Core Satellite Nodes -->
+                            <div class="absolute top-[25%] right-[25%] w-16 h-16 rounded-full border-2 border-white shadow-lg bg-cover bg-center z-10 node-glow-orange animate-float" style="background-image: url('https://i.pravatar.cc/150?img=32'); animation-delay: 1s;">
+                                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-2 py-0.5 rounded text-[8px] font-bold shadow text-slate-600 whitespace-nowrap">Mentor</div>
+                            </div>
+                            <div class="absolute bottom-[30%] left-[25%] w-20 h-20 rounded-full border-2 border-white shadow-lg bg-white flex items-center justify-center z-10 node-glow-blue animate-float-delayed">
+                                <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center">
+                                    <i data-lucide="building-2" class="w-6 h-6 text-indigo-500"></i>
+                                </div>
+                                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-2 py-0.5 rounded text-[8px] font-bold shadow text-slate-600 whitespace-nowrap">Tech Partner</div>
+                            </div>
+                            <div class="absolute top-[30%] left-[20%] w-14 h-14 rounded-full border-2 border-white shadow-lg bg-cover bg-center z-10 node-glow-purple animate-float" style="background-image: url('https://i.pravatar.cc/150?img=9'); animation-delay: 2s;">
+                                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-2 py-0.5 rounded text-[8px] font-bold shadow text-slate-600 whitespace-nowrap">Rising Talent</div>
+                            </div>
+                            <div class="absolute bottom-[35%] right-[20%] w-16 h-16 rounded-full border-2 border-white shadow-lg bg-white flex items-center justify-center z-10 node-glow-orange animate-float-delayed">
+                                <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center">
+                                    <i data-lucide="graduation-cap" class="w-5 h-5 text-orange-500"></i>
+                                </div>
                             </div>
                             
-                            <!-- 2 -->
-                            <div class="space-y-3 border-r border-slate-100 pr-6 lg:last:border-r-0">
-                                <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-teal-600">
-                                    <i data-lucide="bot" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="font-bold text-slate-900 text-sm">AI Agent</h3>
-                                <p class="text-xs text-slate-500 leading-relaxed">An AI platform that does your networking job for you.</p>
-                            </div>
-                            
-                            <!-- 3 -->
-                            <div class="space-y-3 border-r border-slate-100 pr-6 last:border-r-0 lg:last:border-r-0">
-                                <div class="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center text-rose-600">
-                                    <i data-lucide="trending-up" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="font-bold text-slate-900 text-sm">Growth Hub</h3>
-                                <p class="text-xs text-slate-500 leading-relaxed">A hub where you grow professionally and exponentially.</p>
-                            </div>
-                            
-                            <!-- 4 -->
-                            <div class="space-y-3">
-                                <div class="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
-                                    <i data-lucide="target" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="font-bold text-slate-900 text-sm">Impact Tool</h3>
-                                <p class="text-xs text-slate-500 leading-relaxed">A tool to transfer your knowledge and experience into meaningful impact.</p>
-                            </div>
+                            <!-- Edge Nodes (More blurred, lighter opacity) -->
+                            <div class="absolute top-[15%] left-[50%] w-6 h-6 bg-slate-300 rounded-full border border-slate-400 blur-[2px] opacity-60"></div>
+                            <div class="absolute top-[10%] left-[30%] w-5 h-5 bg-purple-200 rounded-full blur-[2px] opacity-40 animate-float-slow" style="animation-delay: 4s;"></div>
+                            <div class="absolute bottom-[10%] right-[35%] w-8 h-8 bg-indigo-300 rounded-full border border-indigo-400 blur-[3px] opacity-50 animate-float-slow" style="animation-delay: 3s;"></div>
+                            <div class="absolute top-[40%] right-[5%] w-7 h-7 bg-blue-300 rounded-full border border-blue-400 blur-[3px] opacity-40 animate-float-slow"></div>
+                            <div class="absolute bottom-[5%] left-[50%] w-4 h-4 bg-orange-300 rounded-full blur-[4px] opacity-30 animate-float-slow" style="animation-delay: 5s;"></div>
+                            <div class="absolute top-[5%] right-[50%] w-5 h-5 bg-purple-200 rounded-full blur-[3px] opacity-50 animate-float-slow" style="animation-delay: 6s;"></div>
+
                         </div>
+
                     </div>
+                    <!-- Lift and be lifted Text -->
+                    <p class="text-xl font-serif font-medium tracking-wide text-slate-600 mt-6">
+                        lift and be lifted
+                    </p>
                 </div>
 
             </div>
@@ -184,6 +249,141 @@
         <div class="absolute top-0 right-0 w-1/2 h-full -z-10 opacity-40 pointer-events-none hidden lg:block overflow-hidden">
             <div class="absolute top-1/4 right-0 w-[800px] h-[800px] bg-gradient-to-b from-blue-50 to-orange-50 rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
             <div class="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-gradient-to-t from-purple-50 to-transparent rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
+        </div>
+    </section>
+
+    <!-- The G.A.I.N. Formula Section (Programs) -->
+    <section id="formula" class="py-24 bg-slate-50 border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-3xl md:text-4xl font-serif text-slate-900">What Does GAIN Offer?</h3>
+            </div>
+
+            <!-- 4-COLUMN GRID (Side-by-Side) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- G: Give-Forward -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-start">
+                    <div class="text-5xl font-serif text-orange-500 opacity-20 leading-none mb-4">G</div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Give-Forward</h4>
+                    <p class="text-sm text-slate-600">Share your knowledge and experience with those who truly need it.</p>
+                </div>
+
+                <!-- A: Acquire -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-start">
+                    <div class="text-5xl font-serif text-blue-500 opacity-20 leading-none mb-4">A</div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Acquire</h4>
+                    <p class="text-sm text-slate-600">Connect with professionals who help you develop and advance.</p>
+                </div>
+                
+                <!-- I: Identify -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-start">
+                    <div class="text-5xl font-serif text-purple-500 opacity-20 leading-none mb-4">I</div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Identify</h4>
+                    <p class="text-sm text-slate-600">Discover and engage experts and rising talent worldwide.</p>
+                </div>
+
+                <!-- N: Network -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-start">
+                    <div class="text-5xl font-serif text-emerald-500 opacity-20 leading-none mb-4">N</div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Network</h4>
+                    <p class="text-sm text-slate-600">Build meaningful professional connections to lift and be lifted.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Pillars Section (Values) -->
+    <section id="values" class="py-32 bg-gainBlue-950 text-white relative overflow-hidden">
+        
+        <!-- Background Grain -->
+        <div class="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-20 text-center">
+                <div class="text-4xl md:text-5xl font-serif leading-tight text-white">
+                    Five Pillars
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Trust -->
+                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
+                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Trust</h3>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Climate of Trust</div>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Moving from low-trust, transactional contacts to high-trust relationships.</p>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Vetted Identity Verification</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Sponsorship-Based Entry</li>
+                    </ul>
+                </div>
+
+                <!-- Reciprocity -->
+                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
+                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="share-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Reciprocity</h3>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Culture of Giving Forward</div>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Shifting from "What can I get?" to "How can we lift each other up?".</p>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Democratized Opportunity</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Intergenerational Support</li>
+                    </ul>
+                </div>
+
+                <!-- Acceleration -->
+                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
+                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Acceleration</h3>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Catalysis of Growth</div>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Moving Armenians into positions of influence through excellence.</p>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Bridging Potential & Power</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Strategic Collisions</li>
+                    </ul>
+                </div>
+
+                <!-- Row 2 (Centered) -->
+                <div class="lg:col-span-3 flex justify-center gap-6 flex-wrap">
+                    
+                    <!-- Belonging -->
+                    <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50 w-full md:w-[48%] lg:w-[32%] max-w-lg">
+                        <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Belonging</h3>
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Shared Identity</div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">Creating a safe, inclusive space for cultural preservation.</p>
+                        <ul class="space-y-2 text-xs text-slate-500">
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Relational over Transactional</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Celebrating Heritage</li>
+                        </ul>
+                    </div>
+
+                    <!-- Impact -->
+                    <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50 w-full md:w-[48%] lg:w-[32%] max-w-lg">
+                        <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Impact</h3>
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Coordinated Resilience</div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">Turning individual success into collective strength.</p>
+                        <ul class="space-y-2 text-xs text-slate-500">
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Unified Crisis Response</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Global Efforts, Local Needs</li>
+                        </ul>
+                    </div>
+                </div> 
+
+            </div>
         </div>
     </section>
 
@@ -282,207 +482,16 @@
         </div>
     </section>
 
-    <!-- The G.A.I.N. Formula Section (Programs) -->
-    <section id="formula" class="py-24 bg-slate-50 border-y border-slate-100">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-3">Our Core Programs</h2>
-                <h3 class="text-3xl md:text-4xl font-serif text-slate-900">What Does GAIN Offer?</h3>
-            </div>
-
-            <!-- UPDATED LAYOUT: Symmetrical 2x2 Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- G: Give Forward (Pillar 1) - Top Left -->
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-2 flex flex-col">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="text-6xl font-serif text-orange-500 opacity-20 leading-none">G</div>
-                        <h4 class="text-2xl font-bold text-slate-900">Give Forward</h4>
-                    </div>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Share your knowledge and experience with those who truly need it.</p>
-                    
-                    <!-- Give Forward Benefits Highlight -->
-                    <div class="grid sm:grid-cols-3 gap-4 pt-6 border-t border-slate-100 mt-auto">
-                        <div class="text-center sm:text-left">
-                            <div class="text-indigo-600 font-bold text-sm mb-1">Trusted Network</div>
-                            <p class="text-[10px] text-slate-500 leading-tight">Connect with verified, reliable professionals worldwide.</p>
-                        </div>
-                        <div class="text-center sm:text-left">
-                            <div class="text-indigo-600 font-bold text-sm mb-1">Meaningful Connections</div>
-                            <p class="text-[10px] text-slate-500 leading-tight">Build relationships that create real impact.</p>
-                        </div>
-                        <div class="text-center sm:text-left">
-                            <div class="text-indigo-600 font-bold text-sm mb-1">Career Momentum</div>
-                            <p class="text-[10px] text-slate-500 leading-tight">Accelerate growth and discover new opportunities.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- A: Acquire (Pillar 2) - Middle Left -->
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-center h-full">
-                    <div class="text-5xl font-serif text-blue-500 mb-4 opacity-20 leading-none">A</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Acquire</h4>
-                    <p class="text-sm text-slate-600">Connect with professionals who help you develop and advance.</p>
-                </div>
-                
-                <!-- I: Identify (Pillar 3) - Middle Right -->
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col justify-center h-full">
-                    <div class="text-5xl font-serif text-purple-500 mb-4 opacity-20 leading-none">I</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Identify</h4>
-                    <p class="text-sm text-slate-600">Discover and engage experts and rising talent worldwide.</p>
-                </div>
-
-                <!-- N: Elevate (Pillar 4) - Bottom Full Width Centered -->
-                <div class="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow md:col-span-2 flex flex-col items-center text-center">
-                    <div class="text-6xl font-serif text-emerald-500 opacity-20 leading-none mb-4">N</div>
-                    <h4 class="text-2xl font-bold text-slate-900 mb-2">Elevate</h4>
-                    <p class="text-sm text-slate-600 max-w-md">Build meaningful professional connections to lift and be lifted.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- The Pillars Section (Values) -->
-    <section id="values" class="py-32 bg-gainBlue-950 text-white relative overflow-hidden">
-        
-        <!-- Background Grain -->
-        <div class="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-        
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="mb-20 text-center">
-                <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-gainBlue-100/60 mb-4">Core Architecture</h2>
-                <div class="text-4xl md:text-5xl font-serif leading-tight text-white">
-                    Five Pillars of the Network State.
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Row 1 -->
-                <!-- Trust -->
-                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
-                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
-                        <i data-lucide="shield-check" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Trust</h3>
-                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Climate of Trust</div>
-                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Moving from low-trust, transactional contacts to high-trust relationships.</p>
-                    <ul class="space-y-2 text-xs text-slate-500">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Vetted Identity Verification</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Sponsorship-Based Entry</li>
-                    </ul>
-                </div>
-
-                <!-- Reciprocity -->
-                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
-                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
-                        <i data-lucide="share-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Reciprocity</h3>
-                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Culture of Giving Forward</div>
-                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Shifting from "What can I get?" to "How can we lift each other up?".</p>
-                    <ul class="space-y-2 text-xs text-slate-500">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Democratized Opportunity</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Intergenerational Support</li>
-                    </ul>
-                </div>
-
-                <!-- Acceleration -->
-                <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50">
-                    <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
-                        <i data-lucide="trending-up" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Acceleration</h3>
-                    <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Catalysis of Growth</div>
-                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Moving Armenians into positions of influence through excellence.</p>
-                    <ul class="space-y-2 text-xs text-slate-500">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Bridging Potential & Power</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Strategic Collisions</li>
-                    </ul>
-                </div>
-
-                <!-- Row 2 (Centered) -->
-                <div class="lg:col-span-3 flex justify-center gap-6 flex-wrap">
-                    
-                    <!-- Belonging -->
-                    <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50 w-full md:w-[48%] lg:w-[32%] max-w-lg">
-                        <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
-                            <i data-lucide="heart" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Belonging</h3>
-                        <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Shared Identity</div>
-                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">Creating a safe, inclusive space for cultural preservation.</p>
-                        <ul class="space-y-2 text-xs text-slate-500">
-                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Relational over Transactional</li>
-                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Celebrating Heritage</li>
-                        </ul>
-                    </div>
-
-                    <!-- Impact -->
-                    <div class="bg-white pillar-card p-8 rounded-2xl shadow-lg cursor-default group border border-gainBlue-100 hover:border-gainBlue-500/50 w-full md:w-[48%] lg:w-[32%] max-w-lg">
-                        <div class="w-12 h-12 bg-gainBlue-50 rounded-full flex items-center justify-center text-gainBlue-600 mb-6 group-hover:bg-gainBlue-600 group-hover:text-white transition-colors duration-300">
-                            <i data-lucide="zap" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-serif font-bold text-gainBlue-950 mb-1">Impact</h3>
-                        <div class="text-[10px] uppercase tracking-wider text-slate-400 mb-4 font-semibold">Coordinated Resilience</div>
-                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">Turning individual success into collective strength.</p>
-                        <ul class="space-y-2 text-xs text-slate-500">
-                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Unified Crisis Response</li>
-                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gainBlue-500 rounded-full"></div>Global Efforts, Local Needs</li>
-                        </ul>
-                    </div>
-                </div> 
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Network Map / Future Section -->
+    <!-- Network Map / Future Section - CONSOLIDATED -->
     <section id="network" class="py-32 bg-[#FDFDFC] overflow-hidden relative">
-        <!-- New Background Layer: Glowing Network Map -->
-        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
-            <!-- Container for absolute nodes -->
-            <div class="relative w-full h-full opacity-30 blur-sm">
-                <!-- SVG Lines Connecting Nodes -->
-                <svg class="absolute inset-0 w-full h-full z-0">
-                    <line x1="15%" y1="20%" x2="45%" y2="40%" stroke="#94a3b8" stroke-width="1" />
-                    <line x1="15%" y1="20%" x2="25%" y2="70%" stroke="#94a3b8" stroke-width="1" />
-                    <line x1="45%" y1="40%" x2="80%" y2="30%" stroke="#94a3b8" stroke-width="1" />
-                    <line x1="45%" y1="40%" x2="70%" y2="75%" stroke="#94a3b8" stroke-width="1" />
-                    <line x1="80%" y1="30%" x2="85%" y2="60%" stroke="#94a3b8" stroke-width="1" />
-                    <line x1="25%" y1="70%" x2="70%" y2="75%" stroke="#94a3b8" stroke-width="1" />
-                </svg>
-
-                <!-- Node 1 -->
-                <div class="absolute top-[20%] left-[15%] w-16 h-16 rounded-full bg-cover bg-center shadow-[0_0_20px_rgba(251,146,60,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=33'); animation-delay: 0s;"></div>
-                
-                <!-- Node 2 -->
-                <div class="absolute top-[40%] left-[45%] w-24 h-24 rounded-full bg-cover bg-center shadow-[0_0_30px_rgba(129,140,248,0.5)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=47'); animation-delay: 2s;"></div>
-                
-                <!-- Node 3 -->
-                <div class="absolute top-[70%] left-[25%] w-12 h-12 rounded-full bg-cover bg-center shadow-[0_0_15px_rgba(167,139,250,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=12'); animation-delay: 4s;"></div>
-                
-                <!-- Node 4 -->
-                <div class="absolute top-[30%] right-[20%] w-20 h-20 rounded-full bg-cover bg-center shadow-[0_0_25px_rgba(52,211,153,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=59'); animation-delay: 1s;"></div>
-                
-                <!-- Node 5 -->
-                <div class="absolute bottom-[25%] right-[30%] w-16 h-16 rounded-full bg-cover bg-center shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=68'); animation-delay: 3s;"></div>
-                
-                <!-- Node 6 -->
-                <div class="absolute bottom-[40%] right-[15%] w-10 h-10 rounded-full bg-cover bg-center shadow-[0_0_15px_rgba(96,165,250,0.4)] animate-float-slow" style="background-image: url('https://i.pravatar.cc/150?img=5'); animation-delay: 5s;"></div>
-            </div>
-        </div>
-
+        
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-20">
+                
                 <div class="lg:w-1/2 space-y-8">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/90 backdrop-blur border border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        Live Network Preview
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        The Virtual Armenian Nation
                     </div>
                     
                     <h2 class="text-4xl md:text-6xl font-serif text-slate-900 leading-[1.1]">
@@ -491,7 +500,7 @@
                     </h2>
                     
                     <p class="text-lg text-slate-500 leading-relaxed max-w-md bg-white/50 backdrop-blur-sm rounded-lg p-2">
-                        Open the “Virtual Armenian Nation” map and see a living, breathing ecosystem. Discover who studies biotech in Paris or who works in policy in DC.
+                        Open the living map and see a breathing ecosystem. Discover who studies biotech in Paris or who works in policy in DC.
                     </p>
 
                     <div class="flex flex-wrap gap-4 pt-4">
@@ -505,6 +514,7 @@
                     </div>
                 </div>
 
+                <!-- Network Visualization (Placeholder) -->
                 <div class="lg:w-1/2 relative">
                     <div class="relative aspect-square md:aspect-[4/3] bg-gradient-to-br from-slate-100/80 to-white/90 backdrop-blur-md rounded-3xl border border-slate-100 shadow-2xl overflow-hidden p-8 group">
                         <!-- Abstract Map UI -->
